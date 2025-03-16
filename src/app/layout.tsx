@@ -1,5 +1,11 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+
+import Providers from "./providers";
+
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
+
 import "./globals.css";
 
 const geistSans = Geist({
@@ -27,14 +33,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
       >
-        <header className="w-full p-5 flex items-center bg-dark text-white">
-          <h2 className="text-2xl font-bold  uppercase">Next<span className="text-primary uppercase">Cinema</span></h2>
-        </header>
-        <main className="flex-1">{children}</main>
-        <footer className="w-full p-10 flex items-center justify-between bg-dark text-white">
-          <h2 className="text-2xl font-bold  uppercase">Next<span className="text-primary uppercase">Cinema</span></h2>
-          <span>© {new Date().getFullYear()} Kinomore</span>
-        </footer>
+        <Providers>
+          <Header />
+          <main className="flex-1 container">{children}</main>
+          <Footer />
+        </Providers>
       </body>
     </html>
   );
