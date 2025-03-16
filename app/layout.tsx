@@ -27,6 +27,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <header className="w-full bg-black p-4 flex items-center">
+          <h1 className="text-4xl font-bold text-blue-500">Next Cinema</h1>
+        </header>
         {children}
       </body>
     </html>
