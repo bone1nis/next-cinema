@@ -1,18 +1,36 @@
-import { API_KEY } from "@/constans/api";
-import { Film } from "@/types/Film";
+import { API_KEY, API_URL } from "@/constans/api";
+import { MovieResponse } from "@/types/Film";
 
-export const getMovies = async (): Promise<Film[]> => {
-    const response = await fetch("https://api.kinopoisk.dev/v1.4/movie?page=1&limit=10&sortField=year&sortType=-1", {
+export const getNewFilms = async (): Promise<MovieResponse> => {
+    const response = await fetch(`${API_URL}movie?page=1&limit=8&selectFields=poster&selectFields=id&selectFields=name&selectFields=description&selectFields=year&notNullFields=id&notNullFields=poster.url&notNullFields=name&notNullFields=description&notNullFields=year&sortField=year&sortType=-1&type=&typeNumber=1&status=completed`, {
         method: "GET",
         headers: {
             'X-API-KEY': API_KEY
         }
     });
+
     if (!response.ok) {
-        throw new Error("ошибка загрузки");
+        throw new Error("Error fetch movies");
     }
+
     const data = await response.json();
-    console.log(data)
+
+    return data;
+}
+
+export const getNewSeries = async (): Promise<MovieResponse> => {
+    const response = await fetch(`${API_URL}movie?page=1&limit=8&selectFields=poster&selectFields=id&selectFields=name&selectFields=description&selectFields=year&notNullFields=id&notNullFields=poster.url&notNullFields=name&notNullFields=description&notNullFields=year&sortField=year&sortType=-1&type=&typeNumber=2&status=completed`, {
+        method: "GET",
+        headers: {
+            'X-API-KEY': API_KEY
+        }
+    });
+
+    if (!response.ok) {
+        throw new Error("Error fetch movies");
+    }
+
+    const data = await response.json();
 
     return data;
 }

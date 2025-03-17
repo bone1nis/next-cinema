@@ -1,7 +1,12 @@
-import { getMovies } from "@/api/movieApi";
+import { getNewFilms, getNewSeries } from "@/api/movieApi";
 import { queryOptions } from "@tanstack/react-query";
 
-export const fetchAllMovies = queryOptions({
-    queryKey: ["movies"],
-    queryFn: getMovies
+export const fetchNewFilms = queryOptions({
+    queryKey: ["newFilms"],
+    queryFn: getNewFilms
+});
+
+export const fetchNewSeries = queryOptions({
+    queryKey: ["newSeries"],
+    queryFn: getNewSeries
 });

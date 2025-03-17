@@ -1,46 +1,49 @@
-export type Cover = {
+export type MovieRating = {
+    kp: number;
+    imdb: number;
+    fimlCritics: number;
+    russianFilmCritics: number;
+    await: number;
+}
+
+export type MovieVotes = {
+    kp: number;
+    imdb: number;
+    fimlCritics: number;
+    russianFilmCritics: number;
+    await: number;
+}
+
+export type MovieGenre = {
+    name: string;
+};
+
+export type MovieCountry = {
+    name: string
+};
+
+export type MovieReleaseYears = {
+    start: number | null;
+    end: number | null;
+}
+
+export type MoviePoster = {
     url: string;
     previewUrl: string;
-};
+}
 
-export type Film = {
-    id: string;
-    slug: string;
-    moviesCount: number;
-    cover: Cover;
+export type Movie = {
+    id: number;
     name: string;
-    updatedAt: string;
-    createdAt: string;
+    year: number;
+    description: string;
+    poster: MoviePoster;
 };
 
-
-/*
-id
-externalid
-name
-enname
-alternativename
-names
-description
-shortdescription
-slogan
-type
-typenumber
-isseries
-
-status
-year
-releaseyears
-rating
-
-ratingmpaa
-agerating
-votes
-seasonsinfo
-budget
-audience
-
-movielength
-serieslength
-totalserieslength
-*/
+export type MovieResponse = {
+    total: number;
+    limit: number;
+    page: number;
+    pages: number;
+    docs: Movie[];
+}
