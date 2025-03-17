@@ -8,11 +8,11 @@ export const NewSeries = () => {
     const { data } = useSuspenseQuery(fetchNewSeries);
 
     return (
-        <div>
-            <h3 className="font-bold text-3xl mb-3">Новые сериалы</h3>
-            <div className="flex justify-between items-end w-full">
+        <div className="p-4">
+            <h3 className="font-bold text-3xl mb-4">Новые сериалы</h3>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {data.docs.map(film => (
-                    <FilmItem key={film.id} film={film} />
+                        <FilmItem key={film.id} film={film} />
                 ))}
             </div>
         </div>

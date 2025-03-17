@@ -8,7 +8,7 @@ export const NewFilms = () => {
     const {data} = useSuspenseQuery(fetchNewFilms);
 
     return (
-        <div>
+        <div className="p-4">
             <h3 className="font-bold text-3xl mb-3">Новые фильмы</h3>
             <div className="flex justify-between items-end w-full">
                 {data.docs.map(film => (
