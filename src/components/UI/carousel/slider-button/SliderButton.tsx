@@ -8,7 +8,7 @@ export const SliderButton = forwardRef<HTMLButtonElement>(
             className='test'
             ref={ref}
         >
-            <Icon name="chevron" />
+            <Icon name="chevron"  />
         </button>
     )
 );

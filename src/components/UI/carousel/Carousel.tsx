@@ -3,18 +3,25 @@ import 'swiper/css';
 import { useCallback, type ReactNode } from 'react';
 import { SwiperSlide, Swiper } from 'swiper/react';
 
-interface CarouselMultiplyProps<T> {
+import 'swiper/css';
+import 'swiper/css/free-mode';
+import 'swiper/css/navigation';
+
+import { FreeMode, Navigation } from 'swiper/modules';
+import { SliderButton } from './slider-button/SliderButton';
+
+interface CarouselProps<T> {
     items: T[];
     renderItem: (item: T, index: number) => ReactNode;
 }
 
-export const CarouselMultiply = <T,>({ items, renderItem }: CarouselMultiplyProps<T>) => {
+export const Carousel = <T,>({ items, renderItem }: CarouselProps<T>) => {
     const renderItems = useCallback(
         (_items: T[]) =>
             _items.map((item, idx) => (
                 <SwiperSlide
                     key={idx}
-                    style={{ marginRight: 'var(--column-gap)' }}
+                    className='m-4'
                 >
                     {renderItem(item, idx)}
                 </SwiperSlide>
@@ -23,16 +30,14 @@ export const CarouselMultiply = <T,>({ items, renderItem }: CarouselMultiplyProp
     );
 
     const swiperOptions = {
-        slidesPerView: 'auto' as const,
-        spaceBetween: 8,
-        breakpoints: {
-            769: {
-                spaceBetween: 15,
-            },
-            1401: {
-                spaceBetween: 18,
-            },
+        slidesPerView: 5,
+        spaceBetween: 10,
+        freeMode: true,
+        pagination: {
+          clickable: true,
         },
+        modules: [FreeMode, Navigation],
+        className: 'w-full'
     };
 
     return (

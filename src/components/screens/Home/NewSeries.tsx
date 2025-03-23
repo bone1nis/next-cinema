@@ -3,6 +3,7 @@
 import { fetchNewSeries } from "@/query/movieQuery";
 import { useSuspenseQuery } from "@tanstack/react-query"
 import { FilmItem } from '@/components/FilmItem';
+import { Carousel } from "@/components/UI/carousel/Carousel";
 
 export const NewSeries = () => {
     const { data } = useSuspenseQuery(fetchNewSeries);
@@ -10,11 +11,10 @@ export const NewSeries = () => {
     return (
         <div className="p-4">
             <h3 className="font-bold text-3xl mb-4">Новые сериалы</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4 justify-items-center">
-                {data.docs.map(film => (
-                    <FilmItem key={film.id} film={film} />
-                ))}
-            </div>
+            <Carousel
+                items={data.docs}
+                renderItem={(film) => <FilmItem film={film} />}
+            />
         </div>
     )
 }
