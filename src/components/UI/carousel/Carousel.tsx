@@ -1,12 +1,13 @@
 import { useCallback, useRef, type ReactNode } from 'react';
+
+import { SliderButton } from './slider-button/SliderButton';
+import { useDomRefWithSetter } from './lib/use-fom-ref-with-setter';
+
 import { SwiperSlide, Swiper } from 'swiper/react';
+import { Navigation } from 'swiper/modules';
 
 import 'swiper/css';
-import 'swiper/css/free-mode';
 import 'swiper/css/navigation';
-
-import { FreeMode, Navigation } from 'swiper/modules';
-import { SliderButton } from './slider-button/SliderButton';
 
 interface CarouselProps<T> {
     items: T[];
@@ -14,15 +15,15 @@ interface CarouselProps<T> {
 }
 
 export const Carousel = <T,>({ items, renderItem }: CarouselProps<T>) => {
-    const prevEl = useRef<null | HTMLButtonElement>(null);
-    const nextEl = useRef<null | HTMLButtonElement>(null);
+    const [nextEl, nextElRef] = useDomRefWithSetter<HTMLButtonElement>();
+    const [prevEl, prevElRef] = useDomRefWithSetter<HTMLButtonElement>();
 
     const renderItems = useCallback(
         (_items: T[]) =>
             _items.map((item, idx) => (
                 <SwiperSlide
                     key={idx}
-                    className='m-4'
+                    className='m-1'
                 >
                     {renderItem(item, idx)}
                 </SwiperSlide>
@@ -34,10 +35,7 @@ export const Carousel = <T,>({ items, renderItem }: CarouselProps<T>) => {
         slidesPerView: 5,
         spaceBetween: 10,
         freeMode: true,
-        pagination: {
-            clickable: true,
-        },
-        modules: [FreeMode, Navigation],
+        modules: [Navigation],
         className: 'w-full'
     };
 
@@ -46,10 +44,10 @@ export const Carousel = <T,>({ items, renderItem }: CarouselProps<T>) => {
             {...swiperOptions}
             navigation={{
                 prevEl,
-                nextEl,
+                nextEl
             }}>
-            <SliderButton ref={prevEl} />
-            <SliderButton ref={nextEl} />
+            <SliderButton ref={prevElRef} direction='left' />
+            <SliderButton ref={nextElRef} direction='right' />
             {renderItems(items)}
         </Swiper>
     );
