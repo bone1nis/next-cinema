@@ -1,6 +1,5 @@
-import type { ButtonHTMLAttributes } from 'react';
 import { forwardRef } from 'react';
-import Icon from './chevron.svg';
+import { GoArrowRight } from "react-icons/go";
 
 export const SliderButton = forwardRef<HTMLButtonElement>(
     (_, ref) => (
@@ -8,7 +7,9 @@ export const SliderButton = forwardRef<HTMLButtonElement>(
             className='test'
             ref={ref}
         >
-            <Icon name="chevron"  />
+            <GoArrowRight name="chevron"  />
         </button>
     )
 );
+
+SliderButton.displayName = 'SliderButton';

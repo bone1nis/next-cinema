@@ -1,6 +1,4 @@
-/* eslint-disable react/no-array-index-key */
-import 'swiper/css';
-import { useCallback, type ReactNode } from 'react';
+import { useCallback, useRef, type ReactNode } from 'react';
 import { SwiperSlide, Swiper } from 'swiper/react';
 
 import 'swiper/css';
@@ -16,6 +14,9 @@ interface CarouselProps<T> {
 }
 
 export const Carousel = <T,>({ items, renderItem }: CarouselProps<T>) => {
+    const prevEl = useRef<null | HTMLButtonElement>(null);
+    const nextEl = useRef<null | HTMLButtonElement>(null);
+
     const renderItems = useCallback(
         (_items: T[]) =>
             _items.map((item, idx) => (
@@ -34,14 +35,21 @@ export const Carousel = <T,>({ items, renderItem }: CarouselProps<T>) => {
         spaceBetween: 10,
         freeMode: true,
         pagination: {
-          clickable: true,
+            clickable: true,
         },
         modules: [FreeMode, Navigation],
         className: 'w-full'
     };
 
     return (
-        <Swiper {...swiperOptions}>
+        <Swiper
+            {...swiperOptions}
+            navigation={{
+                prevEl,
+                nextEl,
+            }}>
+            <SliderButton ref={prevEl} />
+            <SliderButton ref={nextEl} />
             {renderItems(items)}
         </Swiper>
     );
