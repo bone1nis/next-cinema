@@ -1,36 +1,67 @@
 import { API_KEY, API_URL } from "@/constans/api";
-import { MovieResponse } from "@/types/Film";
+import { Movie, MovieResponse } from "@/types/Film";
 
-export const getNewFilms = async (): Promise<MovieResponse> => {
-    const response = await fetch(`${API_URL}movie?page=1&limit=12&selectFields=poster&selectFields=id&selectFields=name&selectFields=description&selectFields=year&notNullFields=id&notNullFields=poster.url&notNullFields=name&notNullFields=description&notNullFields=year&sortField=year&sortType=-1&type=&typeNumber=1&status=completed`, {
-        method: "GET",
-        headers: {
-            'X-API-KEY': API_KEY
-        }
+const fetchMovies = async (typeNumber: number): Promise<MovieResponse> => {
+    const queryParams = new URLSearchParams({
+        page: "1",
+        limit: "12",
+        sortField: "year",
+        sortType: "-1",
+        typeNumber: typeNumber.toString(),
+        status: "completed"
     });
 
-    if (!response.ok) {
-        throw new Error("Error fetch movies");
-    }
+    const selectFields = ["poster", "id", "name", "description", "year"]
+        .map(field => `selectFields=${field}`)
+        .join("&");
 
-    const data = await response.json();
+    const notNullFields = ["id", "poster.url", "name", "description", "year"]
+        .map(field => `notNullFields=${field}`)
+        .join("&");
 
-    return data;
-}
+    const url = `${API_URL}movie?${queryParams}&${selectFields}&${notNullFields}`;
 
-export const getNewSeries = async (): Promise<MovieResponse> => {
-    const response = await fetch(`${API_URL}movie?page=1&limit=12&selectFields=poster&selectFields=id&selectFields=name&selectFields=description&selectFields=year&notNullFields=id&notNullFields=poster.url&notNullFields=name&notNullFields=description&notNullFields=year&sortField=year&sortType=-1&type=&typeNumber=2&status=completed`, {
-        method: "GET",
-        headers: {
-            'X-API-KEY': API_KEY
+    try {
+        const response = await fetch(url, {
+            method: "GET",
+            headers: {
+                "X-API-KEY": API_KEY
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`Fetch error: ${response.status} ${response.statusText}`);
         }
-    });
 
-    if (!response.ok) {
-        throw new Error("Error fetch movies");
+        return await response.json();
+    } catch (error) {
+        console.error("Failed to fetch movies:", error);
+        throw error;
     }
+};
 
-    const data = await response.json();
+const fetchMovieById = async (id: number): Promise<Movie> => {
+    const url = `${API_URL}movie/${id}`;
 
-    return data;
+    try {
+        const response = await fetch(url, {
+            method: "GET",
+            headers: {
+                "X-API-KEY": API_KEY
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`Fetch error: ${response.status} ${response.statusText}`);
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error("Failed to fetch movies:", error);
+        throw error;
+    }
 }
+
+export const getMovieById = (id: number) => fetchMovieById(id);
+export const getNewFilms = () => fetchMovies(1);
+export const getNewSeries = () => fetchMovies(2);

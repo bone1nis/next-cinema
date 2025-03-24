@@ -1,4 +1,4 @@
-import { useCallback, useRef, type ReactNode } from 'react';
+import { useCallback, type ReactNode } from 'react';
 
 import { SliderButton } from './slider-button/SliderButton';
 import { useDomRefWithSetter } from './lib/use-fom-ref-with-setter';
