@@ -7,6 +7,8 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 
 import "./globals.css";
+import { Suspense } from "react";
+import { Spinner } from "@/components/UI/Spinner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,11 +35,13 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
       >
-        <Providers>
-          <Header />
-          <main className="flex-1 container mx-auto">{children}</main>
-          <Footer />
-        </Providers>
+        <Suspense fallback={<Spinner />}>
+          <Providers>
+            <Header />
+            <main className="flex-1 container mx-auto">{children}</main>
+            <Footer />
+          </Providers>
+        </Suspense>
       </body>
     </html>
   );
