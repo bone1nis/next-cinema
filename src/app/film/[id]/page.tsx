@@ -1,21 +1,19 @@
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import { getQueryClient } from "@/helpers/getQueryClient";
+import { fetchMovieById } from "@/query/movieQuery";
 import { Film } from "@/components/screens/Film/Film";
 
-export default async function Page() {
+export default async function FilmPage({ params }: { params: { id: string } }) {
+    const queryClient = getQueryClient();
+    const id = Number(params.id);
+
+    await queryClient.prefetchQuery(fetchMovieById(id));
+
     return (
-        <div className="flex justify-center">
-            <Film />
-        </div>
-    )
+        <HydrationBoundary state={dehydrate(queryClient)}>
+            <div className="flex justify-center">
+                <Film id={id} />
+            </div>
+        </HydrationBoundary>
+    );
 }
-
-
-/*
-export default async function Page({
-    params,
-}: {
-    params: Promise<{ id: string }>
-}) {
-    const { id } = await params
-    return <div>Фильмец: {id}</div>
-}
- */

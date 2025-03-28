@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { fetchNewFilms } from "@/query/movieQuery";
 import { useSuspenseQuery } from "@tanstack/react-query"

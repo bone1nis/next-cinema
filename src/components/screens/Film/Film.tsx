@@ -3,16 +3,13 @@ import { ErrorMessage } from "@/components/UI/ErrorMessage";
 import { Spinner } from "@/components/UI/Spinner";
 import { fetchMovieById } from "@/query/movieQuery";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { useParams } from "next/navigation";
 import Image from "next/image";
 import { Movie } from "@/types/Film";
 
-export const Film = () => {
-    const { id } = useParams();
-    const { data, isLoading, isError } = useSuspenseQuery(fetchMovieById(Number(id)));
+export const Film = ({ id }: { id: number }) => {
+    const { data, isLoading, isError } = useSuspenseQuery(fetchMovieById(id));
 
     if (isLoading) return <Spinner />;
-
     if (isError || !data) return <ErrorMessage />;
 
     const {
@@ -43,9 +40,7 @@ export const Film = () => {
                         className="rounded-md shadow-lg object-cover"
                     />
                     <div className="flex-1">
-                        <p className="text-gray-700 mb-3">
-                            {description}
-                        </p>
+                        <p className="text-gray-700 mb-3">{description}</p>
 
                         {rating?.kp !== 0 && (
                             <p className="text-yellow-500 font-bold text-lg">
@@ -53,14 +48,14 @@ export const Film = () => {
                             </p>
                         )}
 
-                        {genres && genres.length > 0 && (
+                        {genres?.length > 0 && (
                             <div className="mt-2">
                                 <h3 className="text-lg font-semibold">Жанры:</h3>
                                 <p className="text-gray-600">{genres.map((genre) => genre.name).join(", ")}</p>
                             </div>
                         )}
 
-                        {countries && countries.length > 0 && (
+                        {countries?.length > 0 && (
                             <div className="mt-2">
                                 <h3 className="text-lg font-semibold">Страны:</h3>
                                 <p className="text-gray-600">{countries.map((country) => country.name).join(", ")}</p>
