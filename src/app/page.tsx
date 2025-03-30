@@ -1,4 +1,3 @@
-
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 
 import { NewFilms } from "@/features/new-films";
