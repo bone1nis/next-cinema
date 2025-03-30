@@ -3,7 +3,7 @@
 import { fetchNewFilms } from "@/entities/movie/api/movieQuery";
 import { useSuspenseQuery } from "@tanstack/react-query"
 import { MovieItem } from '@/widgets/movie-item/MovieItem';
-import { Filters } from "@/features/movie-filters/ui/Filters";
+import { Filters } from "@/entities/movie/ui/filters";
 
 export const Films = () => {
     const { data } = useSuspenseQuery(fetchNewFilms);
