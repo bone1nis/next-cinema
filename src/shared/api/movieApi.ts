@@ -1,6 +1,31 @@
 import { API_KEY, API_URL } from "@/shared/config/api";
 import { Movie, MovieResponse } from "@/entities/movie/model";
 
+const FAKE_MOVIES: MovieResponse = {
+    total: 12,
+    limit: 12,
+    page: 1,
+    pages: 1,
+    docs: Array.from({ length: 12 }, (_, index) => ({
+        id: index,
+        name: `Неизвестный фильм ${index + 1}`,
+        year: 2024,
+        description: "Описание недоступно.",
+        poster: {
+            url: "https://picsum.photos/200/300",
+            previewUrl: "https://picsum.photos/200/300"
+        },
+        rating: { kp: 0, imdb: 0, filmCritics: 0, russianFilmCritics: 0, await: 0 },
+        votes: { kp: 0, imdb: 0, filmCritics: 0, russianFilmCritics: 0, await: 0 },
+        genres: [{ name: "Неизвестно" }],
+        countries: [{ name: "Неизвестно" }],
+        movieLength: 0,
+        ageRating: 0
+    }))
+};
+
+const deepClone = <T>(obj: T): T => JSON.parse(JSON.stringify(obj));
+
 const fetchMovies = async (typeNumber: number): Promise<MovieResponse> => {
     const queryParams = new URLSearchParams({
         page: "1",
@@ -29,14 +54,12 @@ const fetchMovies = async (typeNumber: number): Promise<MovieResponse> => {
             }
         });
 
-        if (!response.ok) {
-            throw new Error(`Fetch error: ${response.status} ${response.statusText}`);
-        }
+        if (!response.ok) throw new Error(`Fetch error: ${response.status}`);
 
         return await response.json();
     } catch (error) {
-        console.error("Failed to fetch movies:", error);
-        throw error;
+        console.warn("Using fake movies due to fetch error:", error);
+        return deepClone(FAKE_MOVIES);
     }
 };
 
@@ -57,10 +80,11 @@ const fetchMovieById = async (id: number): Promise<Movie> => {
 
         return await response.json();
     } catch (error) {
-        console.error("Failed to fetch movies:", error);
-        throw error;
+        console.warn(`Using fake movie (id: ${id}) due to fetch error:`, error);
+        return deepClone(FAKE_MOVIES.docs[id % 12]);
     }
-}
+};
+
 
 export const getMovieById = (id: number) => fetchMovieById(id);
 export const getNewFilms = () => fetchMovies(1);
