@@ -1,9 +1,10 @@
 
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
-import { getQueryClient } from "@/helpers/getQueryClient";
-import { fetchNewFilms, fetchNewSeries } from "@/query/movieQuery";
-import { NewFilms } from "@/components/screens/Home/NewFilms";
-import { NewSeries } from "@/components/screens/Home/NewSeries";
+
+import { NewFilms } from "@/features/new-films";
+import { NewSeries } from "@/features/new-series";
+import { fetchNewFilms, fetchNewSeries } from "@/entities/movie/api";
+import { getQueryClient } from "@/shared/lib/getQueryClient";
 
 export default async function Home() {
   const queryClient = getQueryClient();
