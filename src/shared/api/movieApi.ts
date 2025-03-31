@@ -1,4 +1,5 @@
-import { API_KEY, API_URL } from "@/shared/config/api";
+import { API_KEY, API_URL } from "@/shared/config";
+
 import { Movie, MovieResponse } from "@/entities/movie/model";
 
 const FAKE_MOVIES: MovieResponse = {
@@ -26,7 +27,7 @@ const FAKE_MOVIES: MovieResponse = {
 
 const deepClone = <T>(obj: T): T => JSON.parse(JSON.stringify(obj));
 
-const fetchMovies = async (typeNumber: number): Promise<MovieResponse> => {
+const fetchMovies = async (typeNumber: number, genreName?: string): Promise<MovieResponse> => {
     const queryParams = new URLSearchParams({
         page: "1",
         limit: "12",
@@ -43,6 +44,10 @@ const fetchMovies = async (typeNumber: number): Promise<MovieResponse> => {
     const notNullFields = ["id", "poster.url", "name", "description", "year"]
         .map(field => `notNullFields=${field}`)
         .join("&");
+
+    if (genreName) {
+        queryParams.append("genres.name", genreName);
+    }
 
     const url = `${API_URL}movie?${queryParams}&${selectFields}&${notNullFields}`;
 
@@ -85,7 +90,7 @@ const fetchMovieById = async (id: number): Promise<Movie> => {
     }
 };
 
-
+export const getMovies = (genreName?: string) => fetchMovies(1, genreName);
 export const getMovieById = (id: number) => fetchMovieById(id);
 export const getNewFilms = () => fetchMovies(1);
 export const getNewSeries = () => fetchMovies(2);

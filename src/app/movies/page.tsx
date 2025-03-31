@@ -1,17 +1,18 @@
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 
-import { fetchNewFilms } from "@/entities/movie/api";
+import { MoviesList } from "@/widgets/movie-list";
+import { fetchMovies } from "@/entities/movie/api";
 import { getQueryClient } from "@/shared/lib/getQueryClient";
-import { Films } from "@/widgets/movie-list";
 
-export default async function FilmsPage() {
+export default async function MoviesPage({ searchParams }: { searchParams?: Record<string, string> }) {
     const queryClient = getQueryClient();
+    const genre = searchParams?.genre || "";
 
-    await queryClient.prefetchQuery(fetchNewFilms);
+    await queryClient.prefetchQuery(fetchMovies(genre));
 
     return (
         <HydrationBoundary state={dehydrate(queryClient)}>
-            <Films />
+            <MoviesList genre={genre} />
         </HydrationBoundary>
     );
 }

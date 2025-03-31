@@ -1,41 +1,40 @@
-import React, { ChangeEvent, useState } from 'react';
+"use client";
 
-export const Filters = () => {
-    const [releaseYear, setReleaseYear] = useState('');
-    const [genre, setGenre] = useState('');
-    const [type, setType] = useState('');
+import { ChangeEvent, FormEvent, useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
-    const handleReleaseYearChange = (event: ChangeEvent<HTMLSelectElement>) => {
-        setReleaseYear(event.target.value);
-    };
+import { GenresEnum } from "@/shared/config";
+
+export const MoviesFilters = () => {
+    const searchParams = useSearchParams();
+    const router = useRouter();
+
+    const genreFromURL = searchParams.get("genre") || "";
+    const [genre, setGenre] = useState(genreFromURL);
+
+    useEffect(() => {
+        setGenre(genreFromURL);
+    }, [genreFromURL]);
 
     const handleGenreChange = (event: ChangeEvent<HTMLSelectElement>) => {
         setGenre(event.target.value);
     };
 
-    const handleTypeChange = (event: ChangeEvent<HTMLSelectElement>) => {
-        setType(event.target.value);
+    const handleSubmit = (e: FormEvent) => {
+        e.preventDefault();
+
+        const params = new URLSearchParams(searchParams.toString());
+        if (genre) {
+            params.set("genre", genre);
+        } else {
+            params.delete("genre");
+        }
+        router.push(`/movies?${params.toString()}`);
     };
 
     return (
         <div className="bg-[var(--color-background)] text-[var(--color-foreground)] p-6 rounded-lg shadow-md mb-8">
-            <form className="flex items-center justify-between space-x-4">
-                <div className="flex-1">
-                    <select
-                        id="release-year"
-                        value={releaseYear}
-                        onChange={handleReleaseYearChange}
-                        className="p-2 w-full border border-[var(--color-secondary)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
-                    >
-                        <option value="">Год выпуска</option>
-                        <option value="2025">2025</option>
-                        <option value="2024">2024</option>
-                        <option value="2023">2023</option>
-                        <option value="2022">2022</option>
-                        <option value="2021">2021</option>
-                    </select>
-                </div>
-
+            <form onSubmit={handleSubmit} className="flex items-center justify-between space-x-4">
                 <div className="flex-1">
                     <select
                         id="genre"
@@ -43,24 +42,12 @@ export const Filters = () => {
                         onChange={handleGenreChange}
                         className="p-2 w-full border border-[var(--color-secondary)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
                     >
-                        <option value="">Жанр</option>
-                        <option value="action">Экшн</option>
-                        <option value="comedy">Комедия</option>
-                        <option value="drama">Драма</option>
-                        <option value="horror">Ужасы</option>
-                    </select>
-                </div>
-
-                <div className="flex-1">
-                    <select
-                        id="type"
-                        value={type}
-                        onChange={handleTypeChange}
-                        className="p-2 w-full border border-[var(--color-secondary)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
-                    >
-                        <option value="">Тип</option>
-                        <option value="movie">Фильм</option>
-                        <option value="series">Сериал</option>
+                        <option value="">Все</option>
+                        {Object.values(GenresEnum).map((genre) => (
+                            <option key={genre} value={genre}>
+                                {genre}
+                            </option>
+                        ))}
                     </select>
                 </div>
 

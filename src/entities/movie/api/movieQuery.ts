@@ -1,4 +1,5 @@
-import { getMovieById, getNewFilms, getNewSeries } from "@/shared/api/movieApi";
+import { getMovieById, getMovies, getNewFilms, getNewSeries } from "@/shared/api/movieApi";
+
 import { queryOptions } from "@tanstack/react-query";
 
 export const fetchNewFilms = queryOptions({
@@ -16,3 +17,9 @@ export const fetchMovieById = (id: number) =>
         queryKey: ["movie", id],
         queryFn: () => getMovieById(id)
     });
+
+export const fetchMovies = (genre?: string) =>
+    queryOptions({
+        queryKey: ["movies"],
+        queryFn: () => getMovies(genre)
+    })
